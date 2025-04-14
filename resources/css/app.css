@@ -1,0 +1,26 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    background: linear-gradient(135deg, #13072e, #ffcc00) !important;
+    color: white !important;
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh; /* Assure que le fond prend toute la hauteur */
+}
+
+
+.container, .card {
+    background: rgba(255, 255, 255, 0.12); /* Effet verre dépoli */
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+    padding: 25px;
+}
+
+.navbar, .footer {
+    background: linear-gradient(90deg, #13072e, #f5b700);
+}
+
