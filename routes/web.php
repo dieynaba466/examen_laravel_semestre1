@@ -74,6 +74,14 @@ Route::middleware(['auth'])->group(function () {
 
         // Statistiques
         Route::get('/statistiques', [DashboardController::class, 'statistiques'])->name('stat.index');
+        // Export PDF
+        Route::get('dashboard/export-pdf', [App\Http\Controllers\DashboardController::class, 'exportPdf'])
+            ->name('dashboard.export.pdf');
+
+// Export Excel
+        Route::get('dashboard/export-excel', [App\Http\Controllers\DashboardController::class, 'exportExcel'])
+            ->name('dashboard.export.excel');
+
 
         // Archivage de livres
         Route::post('/livres/{livre}/archive', [LivreController::class, 'archive'])->name('livres.archive');

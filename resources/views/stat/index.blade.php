@@ -6,6 +6,19 @@
         <div class="container">
             <h1 class="my-4 text-white fw-bold text-center">📊 Tableau de Bord</h1>
 
+            <div class="text-center mb-4">
+                <a href="{{ route('dashboard.export.pdf') }}"
+                   class="btn btn-light border-0 shadow-lg rounded-pill px-4 py-2 me-3"
+                   style="background: rgba(255, 255, 255, 0.85);">
+                    <i class="fas fa-file-pdf text-danger me-2"></i> Export PDF
+                </a>
+                <a href="{{ route('dashboard.export.excel') }}"
+                   class="btn btn-light border-0 shadow-lg rounded-pill px-4 py-2"
+                   style="background: rgba(255, 255, 255, 0.85);">
+                    <i class="fas fa-file-excel text-success me-2"></i> Export Excel
+                </a>
+            </div>
+
             <!-- Statistiques générales avec effet de transparence -->
             <div class="row mb-4">
                 <div class="col-md-4">
@@ -16,6 +29,8 @@
                         </div>
                     </div>
                 </div>
+
+
 
                 <div class="col-md-4">
                     <div class="card border-0 shadow-lg bg-light-transparent">

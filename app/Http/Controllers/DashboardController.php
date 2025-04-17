@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Commande;
 use App\Models\Livre;
 use Illuminate\Http\Request;
+use PDF;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DailySalesExport;
 
 class DashboardController extends Controller
 {
@@ -46,5 +49,24 @@ class DashboardController extends Controller
             'commandesParMois',
             'livresParCategorie'
         ));
+    }
+
+    public function exportPdf()
+    {
+        // Récupère les commandes "Payée" du jour
+        $ventes = Commande::whereDate('updated_at', today())
+            ->where('statut', 'Payée')
+            ->get();
+
+        $pdf = PDF::loadView('pdf.daily_sales', compact('ventes'))
+            ->setPaper('a4', 'landscape');
+
+        return $pdf->download('ventes_journalieres_'.today()->format('Y_m_d').'.pdf');
+    }
+
+
+    public function exportExcel()
+    {
+        return Excel::download(new DailySalesExport, 'ventes_journalieres_'.today()->format('Y_m_d').'.xlsx');
     }
 }
