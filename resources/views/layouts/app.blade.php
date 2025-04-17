@@ -4,51 +4,46 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>DIEYNA LIBRERIE</title>
 
-    <link href="{{ asset('css/app.css') }}?v={{ time() }}" rel="stylesheet">
-
-
+    @vite(['resources/css/app.css'])
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Fonts (Pacifico for a stylish brand) -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
     <style>
         .navbar {
-            background: linear-gradient(135deg, #1e1e1e, #434343);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #13072e, #ffcc00);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
         .navbar-brand {
             font-family: 'Pacifico', cursive;
             font-size: 26px;
-            color: #ffcc00;
+            color: white;
+            text-shadow: 2px 2px 10px rgba(255, 204, 0, 0.6);
         }
         .nav-link {
             color: white !important;
             transition: all 0.3s ease-in-out;
+            padding: 10px 15px;
         }
         .nav-link:hover {
             color: #ffcc00 !important;
             transform: scale(1.05);
         }
-        .search-box input {
-            border-radius: 20px;
-            transition: all 0.3s ease-in-out;
-        }
-        .search-box input:focus {
-            box-shadow: 0 0 8px rgba(255, 204, 0, 0.8);
+        .navbar-nav {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
         }
         .dropdown-menu {
-            background: #262626;
-        }
-        .dropdown-item:hover {
-            background: #ffcc00;
-            color: #1e1e1e !important;
+            background: rgba(255, 204, 0, 0.9);
         }
     </style>
 </head>
@@ -57,73 +52,79 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="{{ route('stat.index') }}">
+        <a class="navbar-brand" href="
+            @auth
+                @if(Auth::user()->role === 'client')
+                    {{ route('catalogue') }}
+                @elseif(Auth::user()->role === 'gestionnaire')
+                    {{ route('stat.index') }}
+                @endif
+            @else
+                {{ url('/') }}
+            @endauth
+        ">
             ✨ DIEYNA LIBRERIE ✨
         </a>
-
-        <!-- Barre de recherche (uniquement pour les clients) -->
-        @auth
-            @if(Auth::user()->role === 'client')
-                <form class="d-flex search-box flex-grow-1 mx-3" method="GET" action="{{ route('search') }}">
-                    <input class="form-control me-2" type="search" placeholder="Rechercher un livre..." name="q" aria-label="Search">
-                    <button class="btn btn-warning" type="submit">Rechercher</button>
-                </form>
-            @endif
-        @endauth
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav">
                 @auth
                     <li class="nav-item">
-                        <span class="nav-link fw-bold">👋 Bonjour, {{ Auth::user()->name }}</span>
+                        <span class="nav-link fw-bold">👋 {{ Auth::user()->role === 'gestionnaire' ? 'Gestionnaire' : Auth::user()->name }}</span>
                     </li>
-
-                    @if(Auth::user()->role === 'gestionnaire')
-                        <li class="nav-item"><a class="nav-link" href="{{ route('livres.index') }}">Livres</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('commandes.index') }}">Commandes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('commandes.commandandepaye', ['commande' => 'all']) }}">Paiements</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('stat.index') }}">Statistiques</a></li>
-                    @endif
 
                     @if(Auth::user()->role === 'client')
-                        <li class="nav-item"><a class="nav-link" href="{{ route('commandes.index') }}">Mes achats</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('panier.index') }}">Panier</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('commandes.index') }}">🛍️ Mes achats</a></li>
+                        <li class="nav-item position-relative">
+                            <a class="nav-link" href="{{ route('panier.index') }}">🛒 Panier
+                                @if(session()->has('panier') && count(session('panier')) > 0)
+                                    <span class="badge bg-danger">{{ count(session('panier')) }}</span>
+                                @endif
+                            </a>
+                        </li>
                     @endif
 
-                    <!-- Bouton Déconnexion aligné à droite -->
+                    @if(Auth::user()->role === 'gestionnaire')
+                        <li class="nav-item"><a class="nav-link" href="{{ route('livres.index') }}">📚 Livres</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('commandes.index') }}">📦 Commandes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('commandes.commandandepaye', ['commande' => 'all']) }}">💰 Paiements</a></li>
+{{--                        <li class="nav-item"><a class="nav-link" href="{{ route('stat.index') }}">📊 Statistiques</a></li>--}}
+                    @endif
+
+                    <!-- Déconnexion : ms-auto pour coller à droite -->
                     <li class="nav-item ms-auto">
-                        <a class="btn btn-outline-danger fw-bold px-4" href="{{ route('logout') }}"
+                        <a class="btn btn-outline-danger fw-bold rounded-pill px-4" href="{{ route('logout') }}"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Déconnexion
+                            🚪 Déconnexion
                         </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                            @csrf
-                        </form>
                     </li>
                 @else
-                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Connexion</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Inscription</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">🔑 Connexion</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">📝 Inscription</a></li>
                 @endauth
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- Contenu principal -->
 <main class="py-4">
     @yield('content')
 </main>
 
-<!-- Footer -->
 <footer class="bg-dark text-center py-3">
     <div class="container">
         <p class="text-white m-0">&copy; {{ date('Y') }} - DIEYNA LIBRERIE. Tous droits réservés.</p>
     </div>
 </footer>
+
+<!-- Formulaire de déconnexion -->
+<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+    @csrf
+</form>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -23,8 +23,8 @@
                         @foreach($commandes as $commande)
                             <tr>
                                 <td>#{{ $commande->id }}</td>
-                                <td class="fw-bold">{{ $commande->client->nom ?? 'Inconnu' }}</td>
-                                <td class="fw-bold text-success">{{ number_format($commande->montant, 2) }} €</td>
+                                <td class="fw-bold">{{ $commande->user->name ?? 'Inconnu' }}</td>
+                                <td class="fw-bold text-success">{{ number_format($commande->total, 2) }} FCFA</td>
                                 <td class="text-secondary">{{ $commande->updated_at->format('d/m/Y H:i') }}</td>
                                 <td>
                                     <span class="badge

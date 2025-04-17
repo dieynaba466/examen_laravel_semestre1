@@ -1,5 +1,5 @@
+@import '@fortawesome/fontawesome-free/css/all.min.css';
 @import 'bootstrap/dist/css/bootstrap.min.css';
-@import '~@fortawesome/fontawesome-free/css/all.min.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,7 +8,23 @@ body {
     background: linear-gradient(135deg, #13072e, #ffcc00) !important;
     color: white !important;
     font-family: 'Poppins', sans-serif;
-    min-height: 100vh; /* Assure que le fond prend toute la hauteur */
+    min-height: 100vh;
+}
+
+.navbar-nav {
+    display: flex !important;
+    flex-wrap: wrap !important; /* Assurer que les éléments ne disparaissent pas */
+    justify-content: flex-end !important;
+}
+
+.navbar-nav .nav-item {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.collapse.show {
+    display: flex !important;
 }
 
 

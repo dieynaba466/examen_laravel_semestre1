@@ -180,6 +180,18 @@ class CommandeController extends Controller
     }
 
 
+    public function block(Commande $commande)
+    {
+        // Vérifier que la commande peut être bloquée (seulement "En attente" ou "En cours")
+        if (!in_array($commande->statut, ['En attente', 'En cours'])) {
+            return redirect()->route('commandes.index')->with('error', '⚠️ Impossible de bloquer une commande Payée ou Expédiée.');
+        }
+
+        // Mise à jour du statut de la commande
+        $commande->update(['statut' => 'Bloquée']);
+
+        return redirect()->route('commandes.index')->with('success', '✅ Commande bloquée avec succès.');
+    }
 
 
 

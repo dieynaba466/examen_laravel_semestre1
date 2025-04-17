@@ -6,6 +6,7 @@ use App\Http\Controllers\LivreController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CategorieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,5 +96,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/panier/valider', [PanierController::class, 'valider'])->name('panier.valider');
         Route::put('/panier/update/{id}', [PanierController::class, 'update'])->name('panier.update');
         Route::delete('/panier/annuler', [PanierController::class, 'annuler'])->name('panier.annuler');
+        Route::get('/categorie/{id}', [CategorieController::class, 'show'])->name('categorie.show');
+
     });
 });

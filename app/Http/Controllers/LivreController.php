@@ -122,7 +122,12 @@ class LivreController extends Controller
 
     public function catalogue()
     {
-        $livres = Livre::where('stock', '>', 0)->paginate(12);
+        // Récupérer tous les livres, y compris ceux en rupture de stock
+        $livres = Livre::paginate(12);
+
         return view('catalogue.index', compact('livres'));
     }
+
+
+
 }

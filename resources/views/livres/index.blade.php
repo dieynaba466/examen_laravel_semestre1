@@ -39,12 +39,16 @@
                                 <td>{{ $livre->auteur }}</td>
                                 <td class="fw-bold text-success">{{ number_format($livre->prix, 2) }} €</td>
                                 <td>
-                                    <span class="badge
-                                        {{ $livre->stock > 10 ? 'bg-success' :
-                                           ($livre->stock > 0 ? 'bg-warning text-dark' : 'bg-danger') }}">
-                                        {{ $livre->stock > 10 ? '✅ Disponible' :
-                                           ($livre->stock > 0 ? '🟠 Stock Faible' : '❌ Épuisé') }}
-                                    </span>
+                                    <div class="fw-bold">
+                                        <span class="badge
+                                            {{ $livre->stock > 10 ? 'bg-success' :
+                                               ($livre->stock > 0 ? 'bg-warning text-dark' : 'bg-danger') }}">
+                                            {{ $livre->stock > 10 ? '✅ Disponible' :
+                                               ($livre->stock > 0 ? '🟠 Stock Faible' : '❌ Épuisé') }}
+                                        </span>
+                                        <br>
+                                        <span class="text-dark">🛒 Quantité: {{ $livre->stock }}</span>
+                                    </div>
                                 </td>
                                 <td class="d-flex justify-content-center gap-2">
                                     <a href="{{ route('livres.edit', $livre->id) }}" class="btn btn-outline-warning btn-sm" title="Modifier">

@@ -45,12 +45,23 @@
                                     <a href="{{ route('commandes.edit', $commande->id) }}" class="btn btn-outline-warning btn-sm" title="Modifier">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <form action="{{ route('commandes.block', $commande->id) }}" method="POST">
-                                        @csrf @method('PATCH')
-                                        <button type="submit" class="btn btn-outline-danger btn-sm" title="Bloquer">
-                                            <i class="fa-solid fa-ban"></i>
-                                        </button>
-                                    </form>
+                                    @if(in_array($commande->statut, ['En attente', 'En cours']))
+                                        <form action="{{ route('commandes.block', $commande->id) }}" method="POST">
+                                            @csrf @method('PATCH')
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" title="Bloquer">
+                                                <i class="fas fa-ban"></i> Bloquer
+                                            </button>
+                                        </form>
+                                        <!-- Bouton Paiement avec l'icône 💰 -->
+                                        <form action="{{ route('commandes.enregistrerPaiement', $commande->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-success btn-sm" title="Enregistrer paiement">
+                                                💰 Paiement
+                                            </button>
+                                        </form>
+                                    @endif
+
+
                                 @endif
 
                                 @if(Auth::user()->role === 'client' && Auth::id() === $commande->user_id)
